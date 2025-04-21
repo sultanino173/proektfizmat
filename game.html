@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Выбор игры</title>
+  <link rel="stylesheet" href="main.css">
+  <style>
+    body {
+      background-color: #f4f4f4;
+      opacity: 0;
+      transition: opacity 1s ease;      
+      font-family: sans-serif;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    body.fade-in {
+      opacity: 1;
+    }
+
+    .game-grid {
+      display: flex;
+      gap: 40px;
+      margin-bottom: 30px;
+      opacity: 0;
+      animation: fadeInGrid 1s ease forwards;
+    }
+
+    .game-card {
+      width: 200px;
+      border: 4px solid #c3a84f;
+      border-radius: 15px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: 0.2s;
+      animation: slideUp 0.5s ease-out;
+    }
+
+    .game-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #c3a84f66;
+    }
+
+    .game-image {
+      height: 120px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .game-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      animation: imageFadeIn 1s ease forwards;
+    }
+
+    .game-desc {
+      background-color: #5c5234;
+      color: #c3a84f;
+      padding: 15px;
+      text-align: center;
+      font-size: 15px;
+    }
+
+    .back-btn {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #c3a84f;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .back-btn:hover {
+      background-color: #b5943e;
+      transform: scale(1.1);
+    }
+
+    @keyframes fadeInGrid {
+      0% {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideUp {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes imageFadeIn {
+      0% {
+        opacity: 0;
+        transform: scale(1.05);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="game-grid">
+    <!-- Первая игра -->
+    <div class="game-card" onclick="location.href='codegame.html'">
+      <div class="game-image"><img src="pg1.png" alt="Угадай код" class="ph1"></div>
+      <div class="game-desc">
+        Угадай код<br>
+        (2 игрока)
+      </div>
+    </div>
+
+    <!-- Вторая игра -->
+    <div class="game-card" onclick="location.href='tbgame.html'">
+      <div class="game-image"><img src="pg2.png" alt="Числа" class="ph2"></div>
+      <div class="game-desc">
+        Найди числа по<br> порядку
+      </div>
+    </div>
+
+    <!-- Третья игра -->
+    <div class="game-card" onclick="location.href='speed.html'">
+      <div class="game-image"><img src="pg3.png" alt="Игра на реакцию" class="ph3"></div>
+      <div class="game-desc">
+        Игра на реакцию<br>(На скорость)
+      </div>
+    </div>
+  </div>
+
+  <!-- Кнопка назад -->
+  <button class="back-btn" onclick="goBack()">← Назад</button>
+
+  <script>
+    // Плавное появление при загрузке
+    window.onload = () => {
+      document.body.classList.add('fade-in');
+    };
+
+    // Анимация исчезновения и переход назад
+    function goBack() {
+      document.body.classList.remove('fade-in');
+      document.body.style.opacity = '0';
+      setTimeout(() => {
+        location.href = 'index.html';
+      }, 500);
+    }
+  </script>
+</body>
+</html>

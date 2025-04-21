@@ -1,0 +1,34 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url("a99eb207-219a-474f-8f67-d69ee8dfca00.png");
+    background-size: cover;
+    background-position: center;
+    font-family: sans-serif;
+  }
+
+.menu {
+    position: absolute;
+    top: 23%;
+    left: 5%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.menu button {
+    font-size: 24px;
+    padding: 15px 30px;
+    background-color: #D2B862; 
+    border: 3px solid #C3A84F; 
+    color: black;
+    font-weight: bold;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.menu button:hover {
+    background-color: #c6a83f;
+    transform: scale(1.05);
+}

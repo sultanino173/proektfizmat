@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Игра с таблицей</title>
+    <style>
+        body {
+            
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        table {
+            border-collapse: collapse;
+            margin: 20px auto;
+            background-color: #fff;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        td {
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            border: 2px solid #000;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s;
+            animation: fadeIn 0.3s ease-in;
+        }
+        td:hover {
+            background-color: #c8f7d4;
+            transform: scale(1.05);
+        }
+        td.clicked {
+            background-color: #28a745 !important;
+            color: white;
+        }
+        #timer {
+            font-size: 24px;
+            margin-top: 20px;
+            color: #555;
+            font-weight: bold;
+        }
+        #start-btn, #restart-btn, #back-btn, #rules-btn {
+            font-size: 20px;
+            padding: 12px 24px;
+            cursor: pointer;
+            border: none;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+            margin-left: 8px;
+            margin-right: 8px;
+        }
+        #start-btn {
+            background-color: #c3a84f;
+            color: #fff;
+        }
+        #start-btn:hover {
+            background-color: #a88f3b;
+        }
+        #restart-btn {
+            background-color: #dc3545;
+            color: #fff;
+            display: none;
+        }
+        #restart-btn:hover {
+            background-color: #c82333;
+        }
+        #back-btn {
+            background-color: #c3a84f;
+            color: #fff;
+        }
+        #back-btn:hover {
+            background-color: #9c8330;
+        }
+        #rules-btn {
+            background-color: #6c757d;
+            color: #fff;
+        }
+        #rules-btn:hover {
+            background-color: #5a6268;
+        }
+        select {
+            font-size: 18px;
+            padding: 6px;
+            margin-top: 10px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .fade-in {
+            animation: fadeInPage 0.6s ease forwards;
+        }
+
+        .fade-out {
+            animation: fadeOutPage 0.4s ease forwards;
+        }
+
+        @keyframes fadeInPage {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeOutPage {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-20px); }
+        }
+
+    </style>
+</head>
+<body class="fade-in">
+    <div class="container">
+        <h1>Выберите режим и нажмите "Начать"</h1>
+        <select id="grid-size">
+            <option value="2">2x2</option>
+            <option value="3">3x3</option>
+            <option value="4">4x4</option>
+            <option value="5" selected>5x5</option>
+            <option value="6">6x6</option>
+            <option value="7">7x7</option>
+            <option value="8">8x8</option>
+            <option value="9">9x9</option>
+            <option value="10">10x10</option>
+            <option value="11">11x11</option>
+            <option value="12">12x12</option>
+            <option value="13">13x13</option>
+            <option value="14">14x14</option>
+            <option value="15">15x15</option>
+            <option value="16">16x16</option>
+            <option value="17">17x17</option>
+            <option value="18">18x18</option>
+            <option value="19">19x19</option>
+            <option value="20">20x20</option>
+        </select>
+        <br>
+        <button id="start-btn">Начать</button>
+        <table id="game-table"></table>
+        <div id="timer">Время: 0.000</div>
+        <div>
+            <button id="restart-btn">Начать заново</button>
+            <button id="back-btn">Назад</button>
+            <button id="rules-btn">Правила игры</button>
+        </div>
+    </div>
+
+    <script>
+        let gridSize = 5;
+        let numbers = [];
+        let currentNumber = 1;
+        let startTime = null;
+        let timerInterval = null;
+        let isStarted = false;
+
+        const table = document.getElementById('game-table');
+        const timer = document.getElementById('timer');
+        const startBtn = document.getElementById('start-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const backBtn = document.getElementById('back-btn');
+        const rulesBtn = document.getElementById('rules-btn');
+        const gridSizeSelect = document.getElementById('grid-size');
+
+        function createTable() {
+            table.innerHTML = '';
+            numbers = Array.from({ length: gridSize * gridSize }, (_, i) => i + 1).sort(() => Math.random() - 0.5);
+            for (let i = 0; i < gridSize; i++) {
+                let row = document.createElement('tr');
+                for (let j = 0; j < gridSize; j++) {
+                    let cell = document.createElement('td');
+                    cell.textContent = numbers[i * gridSize + j];
+                    cell.style.animationDelay = `${(i * gridSize + j) * 20}ms`;
+                    cell.style.opacity = 0;
+                    setTimeout(() => {
+                        cell.style.opacity = 1;
+                    }, (i * gridSize + j) * 20);
+                    cell.onclick = () => handleClick(cell);
+                    row.appendChild(cell);
+                }
+                table.appendChild(row);
+            }
+        }
+
+        function handleClick(cell) {
+            if (isStarted && parseInt(cell.textContent) === currentNumber) {
+                cell.classList.add('clicked');
+                currentNumber++;
+                if (currentNumber > gridSize * gridSize) {
+                    clearInterval(timerInterval);
+                    alert(`Игра окончена! ${timer.textContent}`);
+                    restartBtn.style.display = 'block';
+                }
+            }
+        }
+
+        function startTimer() {
+            startTime = Date.now();
+            timerInterval = setInterval(() => {
+                let elapsed = (Date.now() - startTime) / 1000;
+                timer.textContent = `Время: ${elapsed.toFixed(3)}`;
+            }, 10);
+        }
+
+        startBtn.onclick = () => {
+            gridSize = parseInt(gridSizeSelect.value);
+            startBtn.style.display = 'none';
+            table.style.display = 'table';
+            timer.style.display = 'block';
+            restartBtn.style.display = 'none';
+            currentNumber = 1;
+            isStarted = true;
+            createTable();
+            startTimer();
+        };
+
+        restartBtn.onclick = () => {
+            gridSize = parseInt(gridSizeSelect.value);
+            table.style.display = 'table';
+            timer.style.display = 'block';
+            restartBtn.style.display = 'none';
+            currentNumber = 1;
+            isStarted = true;
+            createTable();
+            startTimer();
+        };
+
+        backBtn.onclick = () => {
+            document.body.classList.remove('fade-in');
+            document.body.classList.add('fade-out');
+            setTimeout(() => {
+                window.location.href = "game.html";
+            }, 400);
+        };
+
+        rulesBtn.onclick = () => {
+            document.body.classList.remove('fade-in');
+            document.body.classList.add('fade-out');
+            setTimeout(() => {
+                window.location.href = "rules1.html";
+            }, 400);
+        };
+    </script>
+</body>
+</html>

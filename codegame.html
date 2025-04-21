@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Режимы игры: Угадай код</title>
+  <style>
+    body {
+      background-color: #f4f4f4;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+
+      font-family: sans-serif;
+      padding: 40px;
+      display: flex;
+      justify-content: center;
+    }
+
+    body.fade-in {
+      opacity: 1;
+    }
+
+    .mode-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .mode-button {
+      padding: 20px 30px;
+      font-size: 20px;
+      background-color: #c3a84f;
+      border: 3px solid #a58e3d;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.2s;
+      text-align: center;
+      min-width: 220px;
+    }
+
+    .mode-button:hover {
+      background-color: #bca146;
+      transform: scale(1.05);
+    }
+
+    .back-btn {
+      padding: 10px 10px;
+      font-size: 16px;
+      background-color: #c3a84f;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .back-btn:hover {
+      background-color: #b5943e;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="mode-grid">
+    <div class="mode-button" onclick="goToRules()">Правила игры</div>
+    <div class="mode-button" onclick="goToBot()">Играть с ботом</div>
+    <div class="mode-button" onclick="goToFriend()">Игра с другом</div>
+    <button class="mode-button back-btn" onclick="goBack()">← Назад</button>
+  </div>
+
+  <script>
+    window.onload = () => {
+      document.body.classList.add('fade-in');
+    };
+
+    function goBack() {
+      document.body.classList.remove('fade-in');
+      document.body.style.opacity = '0';
+      setTimeout(() => {
+        location.href = 'game.html';
+      }, 500);
+    }
+
+    function goToRules() {
+      document.body.classList.remove('fade-in');
+      document.body.style.opacity = '0';
+      setTimeout(() => {
+        location.href = 'rules.html'; // здесь должен быть файл с правилами
+      }, 500);
+    }
+
+    function goToBot() {
+      document.body.classList.remove('fade-in');
+      document.body.style.opacity = '0';
+      setTimeout(() => {
+        location.href = 'bullshot.html';
+      }, 500);
+    }
+
+    function goToFriend() {
+      document.body.classList.remove('fade-in');
+      document.body.style.opacity = '0';
+      setTimeout(() => {
+        location.href = 'tpshot.html';
+      }, 500);
+    }
+  </script>
+
+</body>
+</html>
